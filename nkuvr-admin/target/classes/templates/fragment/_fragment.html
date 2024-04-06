@@ -27,7 +27,7 @@
                     <a href="javascript:void(0)"><i class="mdi mdi-palette"></i> 预约管理</a>
                     <ul class="nav nav-subnav">
                         <li><a href="/appointment/list">预约列表</a></li>
-                            <li><a th:href="@{'/appointment/my/' + ${session.loginUser.id}}">我的预约</a></li>
+                        <li><a th:href="@{'/appointment/my/' + ${session.loginUser.id}}">我的预约</a></li>
                         <li><a href="/appointment/add">新增预约</a></li>
                     </ul>
                 </li>
@@ -53,7 +53,8 @@
                     <span class="lyear-toggler-bar"></span>
                     <span class="lyear-toggler-bar"></span>
                 </div>
-                <span class="navbar-page-title"> Nkuvr 后台管理系统 </span>
+                <span class="navbar-page-title"> Nkuvr 后台管理系统 </span>&nbsp;
+                <marquee class="welcome-message" behavior="scroll" direction="left" th:text="'欢迎 ' + ${session.loginUser.realName} + ' 登录系统'"></marquee>
             </div>
 
             <ul class="topbar-right">
