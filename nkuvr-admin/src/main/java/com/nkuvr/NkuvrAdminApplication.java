@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class NkuvrAdminApplication {
     public static void main(String[] args) {
         SpringApplication.run(NkuvrAdminApplication.class, args);
+        System.out.println(123);
     }
+
 
 }
