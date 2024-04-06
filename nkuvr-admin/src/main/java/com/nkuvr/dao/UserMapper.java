@@ -84,6 +84,12 @@ public interface UserMapper {
      */
     User findUserByStudentNumber(@Param("studentNumber") String studentNumber);
 
+    /**
+     * 根据学号 姓名查询用户
+     */
+    List<User> findUsersByStudentNumber(@Param("studentNumber") String studentNumber);
+
+    List<User> findUsersByRealName(@Param("realName") String realName);
 
 
 }

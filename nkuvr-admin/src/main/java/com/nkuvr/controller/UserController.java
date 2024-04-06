@@ -8,12 +8,12 @@ import com.nkuvr.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: weizujie
@@ -205,5 +205,48 @@ public class UserController {
         }
         return result;
     }
+
+
+
+    @RequestMapping("/search")
+    public String search(@RequestParam("type") String type,
+                         @RequestParam("keyword") String keyword,
+                         @RequestParam(name = "page", defaultValue = "1") Integer pageNum,
+                         Model model) {
+        PageHelper.startPage(pageNum, 5);
+        List<User> users;
+        if ("studentNumber".equals(type)) {
+            users = userService.findUsersByStudentNumber(keyword);
+        } else if ("realName".equals(type)) {
+            users = userService.findUsersByRealName(keyword);
+        } else {
+            users = Collections.emptyList();
+        }
+        PageInfo<User> pageInfo = new PageInfo<>(users, 5);
+        if (users.isEmpty()) {
+            model.addAttribute("errorMessage", "查询错误，该用户不存在");
+        } else {
+            model.addAttribute("pageInfo", pageInfo);
+        }
+        return "user/userList";
+    }
+
+
+    @GetMapping("/checkStudentNumber")
+    @ResponseBody
+    public Map<String, Boolean> checkStudentNumber(@RequestParam String studentNumber) {
+        List<User> users = userService.findUsersByStudentNumber(studentNumber);
+        boolean exists = !users.isEmpty(); // 如果列表不为空，说明至少找到了一个用户，即学号已存在
+        return Collections.singletonMap("exists", exists);
+    }
+
+    @GetMapping("/checkRealName")
+    @ResponseBody
+    public Map<String, Boolean> checkRealName(@RequestParam String realName) {
+        List<User> users = userService.findUsersByRealName(realName);
+        boolean exists = !users.isEmpty();
+        return Collections.singletonMap("exists", exists);
+    }
+
 
 }

@@ -125,5 +125,17 @@ public class UserServiceImpl implements IUserService {
         return userMapper.findUserByStudentNumber(studentNumber);
     }
 
+    @Override
+    public List<User> findUsersByStudentNumber(String studentNumber) {
+        return userMapper.findUsersByStudentNumber(studentNumber);
+    }
+
+    @Override
+    public List<User> findUsersByRealName(String realName) {
+        return userMapper.findUsersByRealName(realName);
+    }
+
+
+
 
 }

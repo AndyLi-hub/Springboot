@@ -107,6 +107,7 @@
 <script type="text/javascript" src="../../js/perfect-scrollbar.min.js"></script>
 <script type="text/javascript" src="../../js/main.min.js"></script>
 <script src="../../layer/layer.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
     function doAdd() {
         var password = $('#password').val();
@@ -163,6 +164,70 @@
             return false;
         });
     }
+</script>
+<script>
+    function checkStudentNumber() {
+        var studentNumber = $("#studentNumber").val();
+        if (!studentNumber) { // 检查是否为空
+            // 可以选择不做任何操作，或者显示提示信息
+            // layer.msg("学号不能为空。", {time: 2000, icon: 5});
+            return; // 直接返回，不发送AJAX请求
+        }
+        $.ajax({
+            url: "/user/checkStudentNumber",
+            type: "GET",
+            data: { studentNumber: studentNumber },
+            success: function(response) {
+                if (response.exists) {
+                    // 使用layer.msg替代alert进行提示
+                    layer.msg("学号已存在，请更换学号。", {time: 1000, icon: 5});
+                    // 清空学号输入框并聚焦
+                    $("#studentNumber").val('').focus();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("检查学号出错: " + error);
+                console.log(xhr.responseText);
+            }
+        });
+    }
+    // 当文档加载完成后绑定事件
+    $(document).ready(function() {
+        // 绑定失焦事件
+        $("#studentNumber").blur(checkStudentNumber);
+    });
+</script>
+<script>
+    function checkRealName() {
+        var realName = $("#realName").val();
+        if (!realName) { // 检查是否为空
+            // 可以选择不做任何操作，或者显示提示信息
+            // layer.msg("学号不能为空。", {time: 2000, icon: 5});
+            return; // 直接返回，不发送AJAX请求
+        }
+        $.ajax({
+            url: "/user/checkRealName",
+            type: "GET",
+            data: { realName: realName },
+            success: function(response) {
+                if (response.exists) {
+                    // 使用layer.msg替代alert进行提示
+                    layer.msg("姓名已存在，请更换姓名。", {time: 2000, icon: 5});
+                    // 清空学号输入框并聚焦
+                    $("#realName").val('').focus();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("检查name出错: " + error);
+                console.log(xhr.responseText);
+            }
+        });
+    }
+    // 当文档加载完成后绑定事件
+    $(document).ready(function() {
+        // 绑定失焦事件
+        $("#realName").blur(checkRealName);
+    });
 </script>
 </body>
 </html>

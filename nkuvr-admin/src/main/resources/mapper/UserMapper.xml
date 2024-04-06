@@ -92,4 +92,12 @@
         select * from sys_user where student_number = #{studentNumber}
     </select>
 
+    <select id="findUsersByStudentNumber" resultType="com.nkuvr.pojo.User">
+        SELECT * FROM sys_user WHERE student_number LIKE CONCAT('%', #{studentNumber}, '%')
+    </select>
+
+    <select id="findUsersByRealName" resultType="com.nkuvr.pojo.User">
+        SELECT * FROM sys_user WHERE real_name LIKE CONCAT('%', #{realName}, '%')
+    </select>
+
 </mapper>
