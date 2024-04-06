@@ -12,4 +12,5 @@ public class NkuvrAdminApplication {
     public static void main(String[] args) {
         SpringApplication.run(NkuvrAdminApplication.class, args);
     }
+
 }
