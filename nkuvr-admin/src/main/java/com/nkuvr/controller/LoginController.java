@@ -65,7 +65,6 @@ public class LoginController {
         return result;
     }
 
-
     /**
      * 处理用户退出
      *
@@ -77,6 +76,5 @@ public class LoginController {
         session.invalidate();
         return "redirect:/login";
     }
-
 
 }

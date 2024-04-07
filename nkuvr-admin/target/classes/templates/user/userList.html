@@ -195,13 +195,14 @@
     $(document).ready(function() {
         // 处理下拉菜单项的点击事件
         $('.dropdown-menu li a').click(function() {
-            var selectedType = $(this).attr('data-field'); // 获取选中的搜索类型
+            var selectedType = $(this).data('field'); // 获取选中的搜索类型
             var selectedText = $(this).text(); // 获取选中项的文本
 
-            // 更新隐藏字段的值和按钮文本
-            $('#search-type').val(selectedType);
-            $('#search-btn').text(selectedText + ' ').append('<span class="caret"></span>');
+            // 更新隐藏字段的值和搜索按钮的文本
+            $('#search-type').val(selectedType); // 假设你有一个隐藏的输入字段用来存储搜索类型
+            $('.dropdown-toggle').first().text(selectedText).append(' <span class="caret"></span>'); // 更新下拉按钮的文本
         });
+
 
         // 监听查询表单的提交事件
         $('#search-form').submit(function(e) {
