@@ -49,6 +49,23 @@
             NOW()
         </trim>
     </insert>
+<!--    <insert id="userAdd" parameterType="list">-->
+<!--        insert into sys_user-->
+<!--        (password, student_number, real_name, gender, state, remark, create_time, update_time)-->
+<!--        values-->
+<!--        <foreach collection="list" item="user" separator=",">-->
+<!--            (-->
+<!--            #{user.password},-->
+<!--            #{user.studentNumber},-->
+<!--            #{user.realName},-->
+<!--            #{user.gender},-->
+<!--            #{user.state},-->
+<!--            #{user.remark},-->
+<!--            NOW(),-->
+<!--            NOW()-->
+<!--            )-->
+<!--        </foreach>-->
+<!--    </insert>-->
 
 
     <!-- 用户个人信息修改 -->
@@ -72,6 +89,13 @@
         delete from sys_user where id = #{id}
     </delete>
 
+    <delete id="piLiangDelete">
+        delete from sys_user where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
     <!-- 用户登录 -->
     <select id="login" resultType="com.nkuvr.pojo.User">
         select * from sys_user where student_number = #{studentNumber} and password = #{password}
@@ -93,7 +117,7 @@
     </select>
 
     <select id="findUsersByStudentNumber" resultType="com.nkuvr.pojo.User">
-        SELECT * FROM sys_user WHERE student_number LIKE CONCAT('%', #{studentNumber}, '%')
+select * from sys_user where student_number = #{studentNumber}
     </select>
 
     <select id="findUsersByRealName" resultType="com.nkuvr.pojo.User">

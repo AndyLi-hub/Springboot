@@ -1,6 +1,5 @@
 package com.nkuvr.dao;
 
-import com.nkuvr.pojo.Appointment;
 import com.nkuvr.pojo.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -53,9 +52,9 @@ public interface UserMapper {
     /**
      * 管理员对用户进行新增
      *
-     * @param user
+     * @param users
      */
-    void userAdd(User user);
+    void userAdd(User users);
 
     /**
      * 用户注册
@@ -87,9 +86,12 @@ public interface UserMapper {
     /**
      * 根据学号 姓名查询用户
      */
-    List<User> findUsersByStudentNumber(@Param("studentNumber") String studentNumber);
+    List<User> findUsersByStudentNumber(@Param("studentNumber") String studentNumber1);
 
     List<User> findUsersByRealName(@Param("realName") String realName);
 
-
+    /**
+     * piliang delete
+     */
+    void piLiangDelete(@Param("ids") Long[] ids);
 }

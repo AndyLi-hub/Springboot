@@ -74,14 +74,9 @@ public class UserServiceImpl implements IUserService {
         userMapper.userEdit(user);
     }
 
-    /**
-     * 管理员对用户进行新增
-     *
-     * @param user
-     */
     @Override
-    public void userAdd(User user) {
-        userMapper.userAdd(user);
+    public void userAdd(User users) {
+        userMapper.userAdd(users);
     }
 
     /**
@@ -135,7 +130,10 @@ public class UserServiceImpl implements IUserService {
         return userMapper.findUsersByRealName(realName);
     }
 
-
+    @Override
+    public void piLiangDelete(Long[] ids) {
+        userMapper.piLiangDelete(ids);
+    }
 
 
 }

@@ -49,17 +49,19 @@ public class LoginController {
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
-            //login认证通过后，便可拿到 shiro 保存的用户对象
-            User user1 = (User) subject.getPrincipal();
-            subject.getSession().setAttribute("loginUser", user1);
+            // 登录成功的逻辑
+            User users = (User) subject.getPrincipal();
+            subject.getSession().setAttribute("loginUser", users);
+            System.out.println(users);
             result.setSuccess(true);
-            // 密码输入错误的时候捕获 IncorrectCredentialsException 异常，不然会报 500 错误
-        } catch (UnknownAccountException | IncorrectCredentialsException e) {
-            model.addAttribute("msg", "学号或密码错误，请重新输入");
+        } catch (UnknownAccountException e) {
+            result.setMessage("用户不存在");
             result.setSuccess(false);
-
+        } catch (IncorrectCredentialsException e) {
+            result.setMessage("密码错误，请重新输入");
+            result.setSuccess(false);
         } catch (LockedAccountException e) {
-            model.addAttribute("msg", "帐号已被禁用");
+            result.setMessage("帐号已被禁用");
             result.setSuccess(false);
         }
         return result;
@@ -71,10 +73,10 @@ public class LoginController {
      * @param session
      * @return
      */
-    @RequestMapping("/logout")
-    public String doLogout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
-    }
+//    @RequestMapping("/logout")
+//    public String doLogout(HttpSession session) {
+//        session.invalidate();
+//        return "redirect:/login";
+//    }
 
 }

@@ -112,9 +112,14 @@
             }
 
             if(localStorage.getItem("password")) {
+                console.log("Password from localStorage:", localStorage.getItem("password"));
+                console.log("进入if语句");
                 $("#password").val(localStorage.getItem("password"));
                 $("#rememberPass").prop('checked', true);
+            } else {
+                console.log("未进入if语句");
             }
+
 
 
         });
@@ -157,10 +162,11 @@
             success: function (result) {
                 layer.close(loadingIndex);
                 if (result.success) {
-                    layer.msg("登录成功", {time: 1000, icon: 6})
+                    layer.msg("登录成功", {time: 10000, icon: 6})
                     window.location.href = "/user/index";
                 } else {
-                    layer.msg("学号或密码错误，请重新输入", {time: 1000, icon: 5, shift: 6});
+                    //layer.msg("学号或密码错误，请重新输入", {time: 1000, icon: 5, shift: 6});
+                    layer.msg(result.message, {time: 1000, icon: 5, shift: 6});
                 }
             }
         });
@@ -179,6 +185,17 @@
             }
         });
     });
+
+        // $(document).ready(function() {
+        //     // 当学号输入框失去焦点时触发验证
+        //     $("#studentNumber").blur(function() {
+        //         // 调用 doLogin 函数进行验证
+        //         // 注意：这里直接调用 doLogin 可能并不合适，因为 doLogin 实际上是尝试登录
+        //         // 你可能需要写一个专门用于验证学号存在与否的函数
+        //         doLogin();
+        //     });
+        // });
+
 </script>
 <script>
 

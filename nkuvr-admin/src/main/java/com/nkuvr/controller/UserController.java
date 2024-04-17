@@ -47,7 +47,7 @@ public class UserController {
      */
     @RequestMapping("/list")
     public String toUserList(@RequestParam(name = "page", defaultValue = "1") Integer pageNum, Model model) {
-        PageHelper.startPage(pageNum, 5);
+        PageHelper.startPage(pageNum, 10);
         List<User> userList = userService.findAll();
         PageInfo<User> pageInfo = new PageInfo<>(userList, 5);
         model.addAttribute("pageInfo", pageInfo);
@@ -96,14 +96,32 @@ public class UserController {
      */
     @RequestMapping("/delete/{id}")
     @ResponseBody
-    public ResultUtil doUserDelete(@PathVariable Long id) {
+    public ResultUtil doUserDelete(@RequestParam("id") Long id) {
         ResultUtil result = new ResultUtil();
         try {
-            userService.deleteUserById(id);
+
+                userService.deleteUserById(id);
+
             result.setSuccess(true);
         } catch (Exception e) {
             e.printStackTrace();
             result.setSuccess(false);
+        }
+        return result;
+    }
+
+    @RequestMapping("/batchDelete")
+    @ResponseBody
+    public ResultUtil doBatchUserDelete(@RequestBody Long[] ids) {
+        ResultUtil result = new ResultUtil();
+        try {
+            userService.piLiangDelete(ids);
+            result.setSuccess(true);
+            result.setMessage("删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setSuccess(false);
+            result.setMessage("删除失败，请重新操作");
         }
         return result;
     }

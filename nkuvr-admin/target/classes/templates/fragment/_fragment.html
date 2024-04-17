@@ -43,6 +43,27 @@
 
 <!--头部信息-->
 <header class="lyear-layout-header" th:fragment="navbar">
+    <style>
+        @keyframes slide {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .welcome-message {
+            display: inline-block;
+            font-size: 18px;
+            color: #ffffff;
+            background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            white-space: nowrap;
+            animation: slide 20s linear infinite;
+        }
+
+    </style>
 
     <nav class="navbar navbar-default">
         <div class="topbar">
@@ -83,5 +104,22 @@
 </header>
 
 
+
 </body>
+<script>
+    // JavaScript 函数，用于处理文件选择后的事件，例如预览图片
+    function previewFile(input) {
+        var file = input.files[0];
+        if (file) {
+            // 创建 FileReader 对象读取文件
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                // 将读取的结果显示到图片src中，实现预览
+                var imgElement = document.querySelector('.img-avatar');
+                imgElement.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 </html>

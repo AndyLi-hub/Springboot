@@ -1,6 +1,5 @@
 package com.nkuvr.utils;
 
-
 /**
  * @Author: weizujie
  * @Date: 2020/4/25
@@ -11,6 +10,7 @@ package com.nkuvr.utils;
 public class ResultUtil {
 
     private boolean success;
+    private String message;
 
     public ResultUtil() {
     }
@@ -25,5 +25,13 @@ public class ResultUtil {
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

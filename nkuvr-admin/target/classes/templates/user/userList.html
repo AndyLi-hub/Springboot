@@ -45,7 +45,7 @@
                                         </div>
                                         <input type="text" class="form-control" name="keyword" placeholder="请输入">
                                         <span class="input-group-btn">
-                                            <button class="btn btn-primary" type="submit">查询</button>
+                                            <button class="btn btn-primary" type="submit"  style="margin-left: 5px;">查询</button>
                                         </span>
                                     </div>
                                 </form>
@@ -57,7 +57,11 @@
                                     <a class="btn btn-warning m-r-5" href="/user/doEdit"><i
                                             class="mdi mdi-block-helper"></i>
                                         禁用</a>
-                                    <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+<!--&lt;!&ndash;                                    <a class="btn btn-danger" href=""><i class="mdi mdi-window-close"></i> 删除</a>&ndash;&gt;-->
+<!--                                    <a class="btn btn-danger" href="#" id="deleteButton"><i class="mdi mdi-window-close"></i> 删除</a>-->
+                                    <a class="btn btn-danger" href="#" id="deleteButton"><i class="mdi mdi-window-close"></i> 删除</a>
+
+
                                 </div>
                             </div>
                             <div class="card-body">
@@ -86,7 +90,7 @@
                                         <tr th:each="user : ${pageInfo.list}">
                                             <td>
                                                 <label class="lyear-checkbox checkbox-primary">
-                                                    <input type="checkbox" name="ids[]" value="1"><span></span>
+                                                    <input type="checkbox" name="ids[]" th:value="${user.id}"><span></span>
                                                 </label>
                                             </td>
                                             <td th:text="${user.id}"></td>
@@ -115,25 +119,55 @@
                                         </tbody>
                                     </table>
                                 </div>
+<!--                                <ul class="pagination">-->
+
+<!--                                    <p>当前第 [[${pageInfo.pageNum}]] 页 | 共 [[${pageInfo.pages}]] 页 | 一共-->
+<!--                                        [[${pageInfo.total}]] 条记录</p>-->
+
+<!--                                    <li th:class="${pageInfo.pageNum == 1 ? 'disabled' : ''}"><a-->
+<!--                                            th:href="@{'/user/list?page=' + ${pageInfo.pageNum - 1}}"><span>«</span></a>-->
+<!--                                    </li>-->
+
+<!--                                    <li th:each="i: ${pageInfo.navigatepageNums}"-->
+<!--                                        th:class="${pageInfo.pageNum == i} ? 'active' : ''"><a-->
+<!--                                            th:href="@{'/user/list?page=' + ${i}}"><span>[[ ${i} ]]</span></a></li>-->
+
+<!--                                    <li th:class="${pageInfo.pageNum == pageInfo.pages ? 'disabled' : ''}"><a-->
+<!--                                            th:href="@{'/user/list?page=' + ${pageInfo.pageNum + 1}}"><span>»</span></a>-->
+<!--                                    </li>-->
+
+
+<!--                                </ul>-->
                                 <ul class="pagination">
+                                    <p>当前第 [[${pageInfo.pageNum}]] 页 | 共 [[${pageInfo.pages}]] 页 | 一共 [[${pageInfo.total}]] 条记录</p>
 
-                                    <p>当前第 [[${pageInfo.pageNum}]] 页 | 共 [[${pageInfo.pages}]] 页 | 一共
-                                        [[${pageInfo.total}]] 条记录</p>
-
-                                    <li th:class="${pageInfo.pageNum == 1 ? 'disabled' : ''}"><a
-                                            th:href="@{'/user/list?page=' + ${pageInfo.pageNum - 1}}"><span>«</span></a>
+                                    <!-- 首页 -->
+                                    <li th:class="${pageInfo.isFirstPage ? 'disabled' : ''}">
+                                        <a th:href="@{'/user/list?page=1'}"><span>首页</span></a>
                                     </li>
 
-                                    <li th:each="i: ${pageInfo.navigatepageNums}"
-                                        th:class="${pageInfo.pageNum == i} ? 'active' : ''"><a
-                                            th:href="@{'/user/list?page=' + ${i}}"><span>[[ ${i} ]]</span></a></li>
-
-                                    <li th:class="${pageInfo.pageNum == pageInfo.pages ? 'disabled' : ''}"><a
-                                            th:href="@{'/user/list?page=' + ${pageInfo.pageNum + 1}}"><span>»</span></a>
+                                    <!-- 上一页 -->
+                                    <li th:class="${pageInfo.pageNum == 1 ? 'disabled' : ''}">
+                                        <a th:href="@{'/user/list?page=' + ${pageInfo.pageNum - 1}}"><span>«</span></a>
                                     </li>
 
+                                    <!-- 页码 -->
+                                    <li th:each="i : ${pageInfo.navigatepageNums}"
+                                        th:class="${pageInfo.pageNum == i} ? 'active' : ''">
+                                        <a th:href="@{'/user/list?page=' + ${i}}"><span>[[ ${i} ]]</span></a>
+                                    </li>
 
+                                    <!-- 下一页 -->
+                                    <li th:class="${pageInfo.pageNum == pageInfo.pages ? 'disabled' : ''}">
+                                        <a th:href="@{'/user/list?page=' + ${pageInfo.pageNum + 1}}"><span>»</span></a>
+                                    </li>
+
+                                    <!-- 最后一页 -->
+                                    <li th:class="${pageInfo.isLastPage ? 'disabled' : ''}">
+                                        <a th:href="@{'/user/list?page=' + ${pageInfo.pages}}"><span>末页</span></a>
+                                    </li>
                                 </ul>
+
 
                             </div>
                         </div>
@@ -210,7 +244,10 @@
 
             var searchType = $("#search-type").val(); // 获取隐藏的搜索类型值
             var keyword = $("input[name='keyword']").val(); // 获取输入框的关键词
-
+            if (!keyword) { // 检查关键词是否为空，可以使用 !keyword 或者 keyword === ""
+                layer.msg("请输入内容再查询", {time: 1000, icon: 6}); // 显示提示消息
+                return; // 返回，不执行后续的 AJAX 请求
+            }
             // 使用AJAX向服务器发送查询请求
             $.ajax({
                 type: "get",
@@ -287,5 +324,65 @@
         }
     });
 </script>
+
+<script>
+    $(document).ready(function() {
+        // 绑定按钮点击事件
+        $('#deleteButton').click(function() {
+            var currentUrl = window.location.href;
+            var selectedIds = []; // 存储选中的ID的数组
+
+            // 遍历所有选中的复选框，并将其值添加到 selectedIds 数组中
+            $('input[name="ids[]"]:checked').each(function() {
+                selectedIds.push($(this).val());
+            });
+
+            // 如果没有选中任何项，给出提示并返回
+            if (selectedIds.length === 0) {
+                layer.msg('请至少选择一个用户。', {time: 2000, icon: 5});
+                return;
+            }
+            if (selectedIds.length !== 0) {
+                layer.confirm('确定要删除吗？', {
+                    icon: 3,
+                    title: '提示',
+                    btn: ['确定', '取消'] // 按钮
+                }, function () {
+                    // 用户点击确定按钮，执行删除操作
+                    $.ajax({
+                        type: "post",
+                        url: "/user/batchDelete", // 修改为正确的接口地址
+                        contentType: "application/json", // 指定请求体的数据类型为 JSON
+                        data: JSON.stringify(selectedIds), // 将选中的ID数组作为请求体发送给后端
+
+                        beforeSend: function () {
+                            loadingIndex = layer.msg("处理中", {icon: 16});
+                        },
+                        success: function (result) {
+                            layer.close(loadingIndex);
+                            if (result.success) {
+                                layer.msg(result.message, {time: 1000, icon: 6}, function () {
+                                    // 消息关闭后执行页面刷新
+                                    window.location.href = currentUrl;
+                                });
+                            } else {
+                                layer.msg(result.message, {time: 1000, icon: 5, shift: 6});
+                            }
+                        }
+                    });
+                }, function () {
+                    // 用户点击取消按钮，不执行任何操作
+                    layer.msg('已取消删除', {time: 2000, icon: 6});
+                });
+            } else {
+                // 如果选中的 ID 数组为空，可以给用户一个提示
+                layer.msg("请选择要删除的数据", {time: 1000, icon: 5});
+            }
+
+            console.log(JSON.stringify({ ids: selectedIds }));
+        });
+    });
+</script>
+
 </body>
 </html>

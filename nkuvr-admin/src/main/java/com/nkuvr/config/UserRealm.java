@@ -61,10 +61,12 @@ public class UserRealm extends AuthorizingRealm {
         User user = userService.findUserByStudentNumber(token.getUsername());
 
         if (user == null) {
-            return null;
+            // 可以直接抛出异常，由调用处捕获并设置错误信息
+            throw new UnknownAccountException("用户不存在");
         }
 
         if (user.getState() == 1) {
+            // 同上，抛出异常
             throw new LockedAccountException("用户被锁定!!!");
         }
         return new SimpleAuthenticationInfo(user, user.getPassword(), getName());
